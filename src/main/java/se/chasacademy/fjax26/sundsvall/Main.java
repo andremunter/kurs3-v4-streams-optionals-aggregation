@@ -53,6 +53,26 @@ public class Main {
         String employeeNameInvalid = Main.getEmployeeNameOrFallback(employees, "Non-Existent");
         IO.println(employeeNameValid);
         IO.println(employeeNameInvalid);
+
+        IO.println("\n====================");
+
+        IO.println("\n3A:");
+        IO.println("Senior Employee (Pay over 60k):");
+        boolean anySeniorEmployee = Main.hasSeniorManagement(employees);
+        IO.println("Senior employees? " + anySeniorEmployee);
+
+        IO.println("\n3B:");
+        IO.println("All employees earn above n?");
+        boolean allEarnAbove50k = Main.allEarnAbove(employees, 50000);
+        boolean allEarnAbove10k = Main.allEarnAbove(employees, 10000);
+        IO.println("Above 50k? " + allEarnAbove50k);
+        IO.println("Above 10k? " + allEarnAbove10k);
+
+        IO.println("\n3C:");
+        IO.println("Unique departments from Employee list");
+        List<Department> uniqueDept = Main.getActiveDepartments(employees);
+        IO.println(uniqueDept);
+
     }
 
     // =========== ====== ===========
@@ -106,5 +126,24 @@ public class Main {
                 .orElse("Okänd anställd");
     }
 
+    // Övning 3 (Medium) – Tillståndskontroller & Unika Samlingar
+    // 3A
+    public static boolean hasSeniorManagement(List<Employee> employees) {
+        return employees.stream()
+                .anyMatch(e -> e.getSalary() > 60_000);
+    }
 
+    // 3B
+    public static boolean allEarnAbove(List<Employee> employees, double minSalary) {
+        return employees.stream()
+                .allMatch(e -> e.getSalary() > minSalary);
+    }
+
+    // 3C
+    public static List<Department> getActiveDepartments(List<Employee> employees) {
+        return employees.stream()
+                .map(Employee::getDepartment)
+                .distinct()
+                .toList();
+    }
 }

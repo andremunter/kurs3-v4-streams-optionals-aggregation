@@ -116,6 +116,30 @@ public class Main {
                 }
         );
 
+        IO.println("\n====================");
+
+        IO.println("\n5A:");
+        IO.println("Average salary per department");
+        Map<Department, Double> departmentAvgSalary = Main.getAverageSalaryPerDepartment(employees);
+        departmentAvgSalary.forEach(
+                (dept, avg) -> IO.println(
+                        String.format("%-12s | %.2f", dept, avg)
+                )
+        );
+
+        IO.println("\n5B:");
+        IO.println("Average salary per department");
+        Map<Department, Long> employeesPerDept = Main.getEmployeeCountPerDepartment(employees);
+        IO.println(employeesPerDept);
+
+        IO.println("\n5C:");
+        IO.println("List of employee names per department");
+        Map<Department, String> namesAtDept = Main.getEmployeeNamesPerDepartment(employees);
+        namesAtDept.forEach(
+                (dept, names) -> IO.println(
+                        String.format("%-12s | %s", dept, names)
+                )
+        );
     }
 
     // =========== ====== ===========
@@ -205,5 +229,24 @@ public class Main {
     public static Map<Boolean, List<Employee>> partitionByHighSalary(List<Employee> employees, double threshold) {
         return employees.stream()
                 .collect(Collectors.partitioningBy(e -> e.getSalary() > threshold));
+    }
+
+    // Övning 5 (Avancerad) – Downstream Collectors & Statistiska Sammanställningar
+    // 5A
+    public static Map<Department, Double> getAverageSalaryPerDepartment(List<Employee> employees) {
+        return employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.averagingDouble(Employee::getSalary)));
+    }
+
+    // 5B
+    public static Map<Department, Long> getEmployeeCountPerDepartment(List<Employee> employees) {
+        return employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.counting()));
+    }
+
+    // 5C
+    public static Map<Department, String> getEmployeeNamesPerDepartment(List<Employee> employees) {
+        return employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.mapping(Employee::getName, Collectors.joining(", "))));
     }
 }

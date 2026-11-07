@@ -160,6 +160,26 @@ public class Main {
                 ===== SPÅR 3 =====
                 ===== ====== =====""");
 
+        IO.println("\n1: Top n paid in department");
+        List<Employee> top2EarnersInDept = AnalyticsEngine.getTopEarnersInDepartment(employees, Department.DEVELOPMENT, 2);
+        List<Employee> top1EarnersInDept = AnalyticsEngine.getTopEarnersInDepartment(employees, Department.DESIGN, 1);
+        IO.println("Top 2 in Development:");
+        top2EarnersInDept.forEach(e -> IO.println("  " + e));
+
+        IO.println("Top 1 in Design:");
+        top1EarnersInDept.forEach(e -> IO.println("  " + e));
+
+        IO.println("\n2: Total salary cost in x department");
+        double totalDevSalary = AnalyticsEngine.getTotalSalaryBudget(employees, Department.DEVELOPMENT);
+        double totalHRSalary = AnalyticsEngine.getTotalSalaryBudget(employees, Department.HR);
+        IO.println("Total in Development: " + totalDevSalary);
+        IO.println("Total in HR: " + totalHRSalary);
+
+        IO.println("\n3: Departments Report:");
+        String report = AnalyticsEngine.generateDepartmentReport(employees);
+        IO.println(report);
+
+
     }
 
     // =========== ====== ===========
@@ -267,7 +287,13 @@ public class Main {
     // 5C
     public static Map<Department, String> getEmployeeNamesPerDepartment(List<Employee> employees) {
         return employees.stream()
-                .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.mapping(Employee::getName, Collectors.joining(", "))));
+                .collect(Collectors.groupingBy(
+                        Employee::getDepartment,
+                        Collectors.mapping(
+                                Employee::getName,
+                                Collectors.joining(", "))
+                        )
+                );
     }
 
     // Övning 6 (Avancerad) – Platta ut nästlade samlingar (flatMap)
@@ -290,7 +316,5 @@ public class Main {
                 .map(Map.Entry::getKey);
     }
 
-    // =========== ====== ===========
-    // =========== SPÅR 3 ===========
-    // =========== ====== ===========
+
 }

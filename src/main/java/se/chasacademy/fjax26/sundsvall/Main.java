@@ -12,6 +12,7 @@ public class Main {
         List<Employee> employees = EmployeeTestData.getEmployees();
 
         IO.println("""
+                
                 ===== ====== =====
                 ===== SPÅR 1 =====
                 ===== ====== =====
@@ -76,10 +77,10 @@ public class Main {
         IO.println(uniqueDept);
 
         IO.println("""
+                
                 ===== ====== =====
                 ===== SPÅR 2 =====
-                ===== ====== =====
-                """);
+                ===== ====== =====""");
 
         IO.println("\n4A:");
         IO.println("Group employees by department:");
@@ -152,6 +153,12 @@ public class Main {
         IO.println("The most common skill:");
         Optional<String> mostCommonSkill = Main.getMostCommonSkill(employees);
         IO.println(mostCommonSkill.orElse("No skills found"));
+
+        IO.println("""
+                
+                ===== ====== =====
+                ===== SPÅR 3 =====
+                ===== ====== =====""");
 
     }
 
@@ -282,4 +289,8 @@ public class Main {
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey);
     }
+
+    // =========== ====== ===========
+    // =========== SPÅR 3 ===========
+    // =========== ====== ===========
 }

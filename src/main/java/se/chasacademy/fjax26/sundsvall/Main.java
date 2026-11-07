@@ -119,7 +119,7 @@ public class Main {
         IO.println("\n====================");
 
         IO.println("\n5A:");
-        IO.println("Average salary per department");
+        IO.println("Average salary per department:");
         Map<Department, Double> departmentAvgSalary = Main.getAverageSalaryPerDepartment(employees);
         departmentAvgSalary.forEach(
                 (dept, avg) -> IO.println(
@@ -128,7 +128,7 @@ public class Main {
         );
 
         IO.println("\n5B:");
-        IO.println("Average salary per department");
+        IO.println("Average salary per department:");
         Map<Department, Long> employeesPerDept = Main.getEmployeeCountPerDepartment(employees);
         IO.println(employeesPerDept);
 
@@ -140,6 +140,19 @@ public class Main {
                         String.format("%-12s | %s", dept, names)
                 )
         );
+
+        IO.println("\n====================");
+
+        IO.println("\n6A:");
+        IO.println("List of unique skills in alphabetical order:");
+        List<String> uniqueSkills = Main.getAllUniqueSkills(employees);
+        IO.println(uniqueSkills);
+
+        IO.println("\n6B:");
+        IO.println("The most common skill:");
+        Optional<String> mostCommonSkill = Main.getMostCommonSkill(employees);
+        IO.println(mostCommonSkill.orElse("No skills found"));
+
     }
 
     // =========== ====== ===========
@@ -248,5 +261,25 @@ public class Main {
     public static Map<Department, String> getEmployeeNamesPerDepartment(List<Employee> employees) {
         return employees.stream()
                 .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.mapping(Employee::getName, Collectors.joining(", "))));
+    }
+
+    // Övning 6 (Avancerad) – Platta ut nästlade samlingar (flatMap)
+    // 6A
+    public static List<String> getAllUniqueSkills(List<Employee> employees) {
+        return employees.stream()
+                .flatMap(e -> e.getSkills().stream())
+                .distinct()
+                .sorted(String::compareTo)
+                .toList();
+    }
+
+    // 6B
+    public static Optional<String> getMostCommonSkill(List<Employee> employees) {
+        return employees.stream()
+                .flatMap(e -> e.getSkills().stream())
+                .collect(Collectors.groupingBy(skill -> skill, Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey);
     }
 }

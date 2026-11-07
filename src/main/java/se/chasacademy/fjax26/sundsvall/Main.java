@@ -2,7 +2,9 @@ package se.chasacademy.fjax26.sundsvall;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Main {
     static void main() {
@@ -63,8 +65,8 @@ public class Main {
 
         IO.println("\n3B:");
         IO.println("All employees earn above n?");
-        boolean allEarnAbove50k = Main.allEarnAbove(employees, 50000);
-        boolean allEarnAbove10k = Main.allEarnAbove(employees, 10000);
+        boolean allEarnAbove50k = Main.allEarnAbove(employees, 50_000);
+        boolean allEarnAbove10k = Main.allEarnAbove(employees, 10_000);
         IO.println("Above 50k? " + allEarnAbove50k);
         IO.println("Above 10k? " + allEarnAbove10k);
 
@@ -72,6 +74,47 @@ public class Main {
         IO.println("Unique departments from Employee list");
         List<Department> uniqueDept = Main.getActiveDepartments(employees);
         IO.println(uniqueDept);
+
+        IO.println("""
+                ===== ====== =====
+                ===== SPÅR 2 =====
+                ===== ====== =====
+                """);
+
+        IO.println("\n4A:");
+        IO.println("Group employees by department:");
+        Map<Department, List<Employee>> employeesByDepartment = Main.groupEmployeesByDepartment(employees);
+        employeesByDepartment.forEach(
+                (dept, empList) -> {
+                    IO.println(dept + ":");
+                    empList.forEach(e -> IO.println("   " + e));
+                }
+        );
+
+        IO.println("\n4B:");
+        IO.println("Partition by salary:");
+
+        IO.println();
+
+        IO.println("Above 50k?");
+        Map<Boolean, List<Employee>> partitionedBySalary50k = Main.partitionByHighSalary(employees, 50_000);
+        partitionedBySalary50k.forEach(
+                (part, empList) -> {
+                    IO.println(part + ":");
+                    empList.forEach(e -> IO.println("   " + e));
+                }
+        );
+
+        IO.println();
+
+        IO.println("Above 40k?");
+        Map<Boolean, List<Employee>> partitionedBySalary40k = Main.partitionByHighSalary(employees, 40_000);
+        partitionedBySalary40k.forEach(
+                (part, empList) -> {
+                    IO.println(part + ":");
+                    empList.forEach(e -> IO.println("   " + e));
+                }
+        );
 
     }
 
@@ -145,5 +188,22 @@ public class Main {
                 .map(Employee::getDepartment)
                 .distinct()
                 .toList();
+    }
+
+    // =========== ====== ===========
+    // =========== SPÅR 2 ===========
+    // =========== ====== ===========
+
+    //Övning 4 (Medium) – Datagruppering med Collectors.groupingBy() & partitioningBy()
+    // 4A
+    public static Map<Department, List<Employee>> groupEmployeesByDepartment(List<Employee> employees) {
+        return employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment));
+    }
+
+    // 4B
+    public static Map<Boolean, List<Employee>> partitionByHighSalary(List<Employee> employees, double threshold) {
+        return employees.stream()
+                .collect(Collectors.partitioningBy(e -> e.getSalary() > threshold));
     }
 }
